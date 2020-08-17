@@ -1,0 +1,454 @@
+openapi: 3.0.0
+info:
+  title: ECommerce
+  version: 1.0.0-oas3
+  contact: {}
+  description: API de vendas para o e-commerce da Big Corp S/A
+paths:
+  /clientes:
+    get:
+      summary: ListarClientes
+      tags:
+        - Clientes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/cliente'
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+      operationId: ListarClientes
+      security:
+        - client_id: []
+      description: Lista todos os clientes de acordo com o filtro
+      parameters:
+        - in: query
+          name: status
+          description: Filtro de status a ser aplicado
+          schema:
+            type: string
+        - in: query
+          name: ordem
+          description: Campo a ser usado como ordenação da listagem
+          required: true
+          schema:
+            type: string
+    post:
+      summary: InserirCliente
+      operationId: InserirCliente
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+      description: Cria um novo cliente
+      security:
+        - client_id: []
+      tags:
+        - Clientes
+      requestBody:
+        $ref: '#/components/requestBodies/cliente'
+    parameters: []
+  '/clientes/{idCliente}':
+    get:
+      summary: ObterCliente
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cliente'
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+      operationId: ObterCliente
+      tags:
+        - Clientes
+      description: Recupera os dados do cliente selecionado
+      security:
+        - client_id: []
+    parameters:
+      - name: idCliente
+        in: path
+        required: true
+        description: Identificador do cliente a ser atualizado
+        schema:
+          type: string
+    put:
+      summary: AtualizarCliente
+      operationId: AtualizarCliente
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+      description: Atualiza os dados de um cliente
+      security:
+        - client_id: []
+      tags:
+        - Clientes
+      requestBody:
+        $ref: '#/components/requestBodies/cliente'
+  /pedidos:
+    get:
+      summary: ListarPedidos
+      tags:
+        - Pedidos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pedido'
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+      operationId: ListarPedidos
+      security:
+        - client_id: []
+      parameters:
+        - in: query
+          name: status-entrega
+          description: Filtro de status a ser aplicado na listagem
+          required: true
+          schema:
+            type: string
+      description: Lista todos os pedidos conforme o filtro de status da entrega
+  /produtos:
+    parameters: []
+    get:
+      summary: ListarProdutos
+      tags:
+        - Produtos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/produto'
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+      operationId: ListarProdutos
+      description: Lista todos os produtos
+  '/clientes/{idcliente}/pedidos':
+    parameters:
+      - name: idcliente
+        in: path
+        required: true
+        description: Identificador do cliente
+        schema:
+          type: string
+    get:
+      summary: ListarPedidosCliente
+      tags:
+        - Clientes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+               schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pedido'
+        '204':
+          description: No Content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+      operationId: ListarPedidosCliente
+      description: Lista todos os pedidos de um cliente
+      security:
+        - client_id: []
+    post:
+      summary: InserirPedido
+      operationId: InserirPedido
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retorno'
+      description: Cria um novo pedido para o cliente
+      security:
+        - client_id: []
+      tags:
+        - Clientes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pedido'
+servers:
+  - url: 'https://localhost:3000/ecommerce/v1'
+components:
+  requestBodies:
+    cliente:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/cliente'
+    produto:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/produto'
+  securitySchemes:
+    client_id:
+      name: client_id
+      type: apiKey
+      in: header
+      description: Identificador do consumidor da API
+  schemas:
+    cliente:
+      title: cliente
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do cliente
+        nome:
+          type: string
+          example: Fulano de Tal
+          description: Nome do cliente
+        data-cadastro:
+          type: string
+          format: date
+          example: 10/12/2020
+          description: Data de cadastro do cliente
+        status:
+          type: string
+          example: Ativo
+          description: Status do cliente (Ativo/Inativo)
+      required:
+        - id
+        - nome
+        - data-cadastro
+    produto:
+      title: produto
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identificador do produto
+        nome:
+          type: string
+          example: caixa de som
+          description: Nome do produto
+        valor:
+          type: number
+          example: '2100.90'
+          description: Valor do produto
+        disponivel:
+          type: boolean
+          example: 'true'
+          description: Indicador de disponibilidade do produto
+        pedidos:
+          type: array
+          items:
+            $ref: '#/components/schemas/produtoPedido'
+      required:
+        - id
+        - nome
+        - valor
+    pedido:
+      title: pedido
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: |
+            Identificador do pedido
+        data-cadastro:
+          type: string
+          format: date-time
+          example: '10/12/2020 13:50:55'
+          description: Data de cadasro do pedido
+        idCliente:
+          type: string
+          format: uuid
+          description: Identificador do cliente que efetuou a compra
+        status-entrega:
+          type: string
+          description: 'Status do processo de entrega (Pendente, Cancelado, Entregue)'
+          example: Entregue
+        produtos:
+          type: array
+          items:
+            $ref: '#/components/schemas/produtoPedido'
+      required:
+        - id
+        - data-cadastro
+        - idCliente
+        - status-entrega
+    retorno:
+      title: retorno
+      type: object
+      properties:
+        mensagem:
+          type: string
+          example: Exemplo Sucesso
+          description: Mensagem de retorno do processamento
+        sucesso:
+          type: boolean
+          description: Indicação de sucesso o falha
+        descricao:
+          type: string
+          example: Texto longo descritivo
+          description: Descrição longa do retorno
+    produtoPedido:
+      title: produtoPedido
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: |
+            Identificador da entidade de relacionamento
+        pedido:
+          $ref: '#/components/schemas/pedido'
+        produto:
+          $ref: '#/components/schemas/produto'
+        quantidade:
+          type: integer
+          description: Quantidade solicitada no pedido
+      required:
+        - pedido
+        - produto
+        - quantidade
+        - id
